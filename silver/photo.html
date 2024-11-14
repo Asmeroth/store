@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科幻风访问者信息展示</title>
+    <style>
+        /* 设置全局样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0e0e0e;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* 主容器 */
+        .container {
+            display: flex;
+            width: 800px;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        /* 左侧信息部分 */
+        .info-section {
+            width: 50%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #00e0e0;
+            font-size: 16px;
+        }
+
+        .info-section h1 {
+            font-size: 24px;
+            color: #00ffff;
+            text-shadow: 0 0 5px #00e0e0, 0 0 10px #00e0e0;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .info {
+            margin: 5px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #a0ffff;
+            text-shadow: 0 0 5px #00e0e0;
+        }
+
+        /* 右侧图片部分 */
+        .image-section {
+            width: 50%;
+            background-image: url('1.jpg'); /* 将路径替换为实际图片路径 */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 动态边框效果 */
+        .container {
+            position: relative;
+            animation: borderPulse 2s infinite;
+        }
+
+        @keyframes borderPulse {
+            0% {
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(0, 255, 255, 1);
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧信息展示区域 -->
+        <div class="info-section">
+            <h1>访客信息</h1>
+            <div id="browserInfo" class="info">浏览器信息：<span class="highlight">加载中...</span></div>
+            <div id="osInfo" class="info">操作系统：<span class="highlight">加载中...</span></div>
+            <div id="languageInfo" class="info">语言设置：<span class="highlight">加载中...</span></div>
+            <div id="timezoneInfo" class="info">时区：<span class="highlight">加载中...</span></div>
+            <div id="timeInfo" class="info">当前时间：<span class="highlight">加载中...</span></div>
+            <div id="networkInfo" class="info">网络信息：<span class="highlight">加载中...</span></div>
+        </div>
+
+        <!-- 右侧图片展示区域 -->
+        <div class="image-section"></div>
+    </div>
+
+    <script>
+        // 获取并展示信息
+        const userAgent = navigator.userAgent;
+        document.getElementById('browserInfo').innerHTML = "浏览器信息：<span class='highlight'>" + userAgent + "</span>";
+
+        const os = userAgent.includes("Windows") ? "Windows" : 
+                   userAgent.includes("Mac OS") ? "Mac OS" : 
+                   userAgent.includes("Linux") ? "Linux" : 
+                   userAgent.includes("Android") ? "Android" : 
+                   userAgent.includes("iPhone") ? "iOS" : "未知";
+        document.getElementById('osInfo').innerHTML = "操作系统：<span class='highlight'>" + os + "</span>";
+
+        const language = navigator.language || "未知";
+        document.getElementById('languageInfo').innerHTML = "语言设置：<span class='highlight'>" + language + "</span>";
+
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById('timezoneInfo').innerHTML = "时区：<span class='highlight'>" + timeZone + "</span>";
+
+        function updateTime() {
+            const currentTime = new Date().toLocaleString();
+            document.getElementById('timeInfo').innerHTML = "当前时间：<span class='highlight'>" + currentTime + "</span>";
+        }
+        updateTime();
+        setInterval(updateTime, 1000); // 每秒更新时间
+
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection) {
+            const networkType = connection.effectiveType || "未知";
+            const downlink = connection.downlink ? connection.downlink + " Mbps" : "未知";
+            document.getElementById('networkInfo').innerHTML = 
+                "网络信息：<span class='highlight'>类型：" + networkType + ", 下行速度：" + downlink + "</span>";
+        } else {
+            document.getElementById('networkInfo').innerHTML = "网络信息：<span class='highlight'>未知</span>";
+        }
+    </script>
+</body>
+</html>
